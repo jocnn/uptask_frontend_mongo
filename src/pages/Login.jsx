@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const Login = () => {
   return (
@@ -48,7 +48,18 @@ const Login = () => {
         />
       </form>
 
-      <Outlet />
+      <nav className="lg:flex lg:justify-between">
+        <Link
+          className="block text-center my-5 text-slate-500 uppercase text-sm"
+          to="registrar"
+        >¿No tienes una cuenta? Regístrate
+        </Link>
+        <Link
+          className="block text-center my-5 text-slate-500 uppercase text-sm"
+          to="olvide-password"
+        >Olvide Mi Contraseña
+        </Link>
+      </nav>
     </>
   )
 }
