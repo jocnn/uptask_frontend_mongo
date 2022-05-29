@@ -22,6 +22,28 @@ const Register = () => {
       })
       return
     }
+
+    if (password !== repetirPassword) {
+      setAlerta({
+        msg: 'Las contraseñas no son iguales',
+        error: true
+      })
+      return
+    }
+
+    if (password.length < 6 ) {
+      setAlerta({
+        msg: 'La contraseña es muy corta, agrega minimo 6 caracteres',
+        error: true
+      })
+      return
+    }
+
+    setAlerta({})
+
+    // creacion de usuario en la api
+    console.info('creando')
+
   }
 
   const { msg } = alerta
