@@ -3,9 +3,10 @@ import { Link, useParams } from "react-router-dom"
 import axios from "axios"
 import Alert from "../components/Alert"
 
-
 const NewPassword = () => {
 
+  const [ passwordAceptada, setPasswordAceptada ] = useState(false)
+  const [ password, setPassword ] = useState('')
   const [ tokenValido, setTokenValido ] = useState(false)
   const [ alerta, setAlerta ] = useState({})
 
@@ -30,6 +31,34 @@ const NewPassword = () => {
 
   const { msg } = alerta
 
+  const handleSubmit = async e => {
+    e.preventDefault()
+
+    if (password.length < 6) {
+      setAlerta({
+        msg: 'El password debe ser minimo de 6 caracteres',
+        error: true
+      })
+      return
+    }
+
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/olvide-password/${token}`, { password })
+      setAlerta({
+        msg: data.msg,
+        error: false
+      })
+      setTokenValido(false)
+      setPasswordAceptada(true)
+    } catch (error) {
+      setPasswordAceptada(false)
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true
+      })
+    }
+  }
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
@@ -42,8 +71,10 @@ const NewPassword = () => {
 
       {
         tokenValido && (
-          <form className="my-10 bg-white shadow rounded-lg p-10">
-            
+          <form 
+            onSubmit={handleSubmit}
+            className="my-10 bg-white shadow rounded-lg p-10"
+          >
             <div className="my-5">
               <label 
                 htmlFor="password"
@@ -56,6 +87,8 @@ const NewPassword = () => {
                 type="password"
                 placeholder="Escribe tu nueva contraseña"
                 className="w-full mt-3 p-3 border rounded bg-gray-50"
+                value={password}
+                onChange={ e => setPassword(e.target.value) }
               />
             </div>
 
@@ -68,6 +101,16 @@ const NewPassword = () => {
                 hover:bg-sky-800 transition-colors"
             />
           </form>
+        )
+      }
+
+      {
+        passwordAceptada && (
+          <Link
+            className="block text-center my-5 text-slate-500 uppercase text-sm"
+            to="/"
+          >Iniciar Sesión
+          </Link>
         )
       }
     </>
