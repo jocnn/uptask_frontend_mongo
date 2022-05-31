@@ -1,11 +1,12 @@
 import { useState } from "react"
-import axios from "axios"
+import clienteAxios from "../config/clienteAxios"
 import { Link } from "react-router-dom"
 
 import Alert from "../components/Alert"
 
 const Register = () => {
 
+  const [ registroExitoso, setRegistroExitoso ] = useState(true)
   const [ nombre, setNombre ] = useState('')
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -43,19 +44,18 @@ const Register = () => {
 
     // creacion de usuario en la api
     try {
-      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios`, {nombre, email, password})
+      const { data } = await clienteAxios.post(`/usuarios`, {nombre, email, password})
       setAlerta({
         msg: data.msg,
         error: false
       })
 
-      setTimeout(() => {
-        setNombre('')
-        setEmail('')
-        setPassword('')
-        setRepetirPassword('')
-        setAlerta({})
-      }, 3000);
+      setRegistroExitoso(false)
+
+      setNombre('')
+      setEmail('')
+      setPassword('')
+      setRepetirPassword('')
 
     } catch (error) {
       setAlerta({
@@ -77,87 +77,93 @@ const Register = () => {
         msg && <Alert alerta={alerta} />
       }
 
-      <form 
-        className="my-10 bg-white shadow rounded-lg p-10"
-        onSubmit={handleSubmit}
-      >
-        <div className="my-5">
-          <label 
-            htmlFor="nombre"
-            className="uppercase text-gray-600 block text-xl font-bold"
+      {
+        registroExitoso && (
+          <form 
+            className="my-10 bg-white shadow rounded-lg p-10"
+            onSubmit={handleSubmit}
           >
-            Nombre
-          </label>
-          <input
-            id="nombre"
-            type="nombre"
-            placeholder="Nombre de usuario"
-            className="w-full mt-3 p-3 border rounded bg-gray-50"
-            value={nombre}
-            onChange={ e => setNombre(e.target.value) }
-          />
-        </div>
+            <div className="my-5">
+              <label 
+                htmlFor="nombre"
+                className="uppercase text-gray-600 block text-xl font-bold"
+              >
+                Nombre
+              </label>
+              <input
+                id="nombre"
+                type="nombre"
+                placeholder="Nombre de usuario"
+                className="w-full mt-3 p-3 border rounded bg-gray-50"
+                value={nombre}
+                onChange={ e => setNombre(e.target.value) }
+              />
+            </div>
 
-        <div className="my-5">
-          <label 
-            htmlFor="email"
-            className="uppercase text-gray-600 block text-xl font-bold"
-          >
-            Correo Electrónico
-          </label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Correo Electrónico"
-            className="w-full mt-3 p-3 border rounded bg-gray-50"
-            value={email}
-            onChange={ e => setEmail(e.target.value) }            
-          />
-        </div>
+            <div className="my-5">
+              <label 
+                htmlFor="email"
+                className="uppercase text-gray-600 block text-xl font-bold"
+              >
+                Correo Electrónico
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Correo Electrónico"
+                className="w-full mt-3 p-3 border rounded bg-gray-50"
+                value={email}
+                onChange={ e => setEmail(e.target.value) }            
+              />
+            </div>
 
-        <div className="my-5">
-          <label 
-            htmlFor="password"
-            className="uppercase text-gray-600 block text-xl font-bold"
-          >
-            Contraseña
-          </label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Password para la cuenta"
-            className="w-full mt-3 p-3 border rounded bg-gray-50"
-            value={password}
-            onChange={ e => setPassword(e.target.value) }
-          />
-        </div>
+            <div className="my-5">
+              <label 
+                htmlFor="password"
+                className="uppercase text-gray-600 block text-xl font-bold"
+              >
+                Contraseña
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Password para la cuenta"
+                className="w-full mt-3 p-3 border rounded bg-gray-50"
+                value={password}
+                onChange={ e => setPassword(e.target.value) }
+              />
+            </div>
 
-        <div className="my-5">
-          <label 
-            htmlFor="repeat_password"
-            className="uppercase text-gray-600 block text-xl font-bold"
-          >
-            Repetir contraseña
-          </label>
-          <input
-            id="repeat_password"
-            type="password"
-            placeholder="Repetir su contraseña"
-            className="w-full mt-3 p-3 border rounded bg-gray-50"
-            value={repetirPassword}
-            onChange={ e => setRepetirPassword(e.target.value) }
-          />
-        </div>
+            <div className="my-5">
+              <label 
+                htmlFor="repeat_password"
+                className="uppercase text-gray-600 block text-xl font-bold"
+              >
+                Repetir contraseña
+              </label>
+              <input
+                id="repeat_password"
+                type="password"
+                placeholder="Repetir su contraseña"
+                className="w-full mt-3 p-3 border rounded bg-gray-50"
+                value={repetirPassword}
+                onChange={ e => setRepetirPassword(e.target.value) }
+              />
+            </div>
 
-        <input 
-          type="submit" 
-          value="Crear Cuenta"
-          className="mb-5
-            bg-sky-700 w-full py-3 text-white 
-            uppercase font-bold rounded hover:cursor-pointer
-            hover:bg-sky-800 transition-colors"
-        />
-      </form>
+            <input 
+              type="submit" 
+              value="Crear Cuenta"
+              className="mb-5
+                bg-sky-700 w-full py-3 text-white 
+                uppercase font-bold rounded hover:cursor-pointer
+                hover:bg-sky-800 transition-colors"
+            />
+          </form>
+        )
+      }
+
+      
 
       <nav className="lg:flex lg:justify-between">
         <Link
