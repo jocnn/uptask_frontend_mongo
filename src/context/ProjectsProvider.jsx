@@ -5,10 +5,12 @@ const ProjectsContext = createContext()
 
 const ProjectsProvider = ({children}) => {
 
+  const [ proyectos, setProyectos ] = useState([])
+
   return (
     <ProjectsContext.Provider 
       value={{
-        
+        proyectos,
       }}
     >
       {children}
