@@ -1,4 +1,9 @@
+import useProjects from "../hooks/useProjects"
+
 const Projects = () => {
+  
+  const { proyectos } = useProjects()
+  
   return (
     <>
       <h1
