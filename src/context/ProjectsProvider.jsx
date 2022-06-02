@@ -22,7 +22,7 @@ const ProjectsProvider = ({children}) => {
           }
         }
         const { data } = await clienteAxios('/proyectos', config)
-        setProyectos(data)
+        setProyectos(...proyectos, data)
       } catch (error) {
         console.log(error)
       }
