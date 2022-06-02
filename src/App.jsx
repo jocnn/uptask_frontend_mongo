@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthProvider"
 import Projects from "./pages/Projects"
 import NewProject from "./pages/NewProject"
 import { ProjectsProvider } from "./context/ProjectsProvider"
+import Project from "./pages/Project"
 
 function App() {
   
@@ -30,6 +31,7 @@ function App() {
             <Route path="/proyectos" element={ <ProtectedRoute />}>
               <Route index element={<Projects />} />
               <Route path="crear-proyecto" element={<NewProject />} />
+              <Route path=":id" element={<Project />} />
             </Route>
           </Routes>
         </ProjectsProvider>
