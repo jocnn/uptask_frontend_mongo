@@ -7,6 +7,7 @@ const ProjectsContext = createContext()
 const ProjectsProvider = ({children}) => {
 
   const [ proyectos, setProyectos ] = useState([])
+  const [ proyecto, setProyecto ] = useState({})
   const [ alerta, setAlerta ] = useState({})
 
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ const ProjectsProvider = ({children}) => {
     const obtenerProyectos = async () => {
       try {
         const token = localStorage.getItem('token')
+        if (!token) return
         const config = {
           headers: {
             "Content-Type": "application/json",
@@ -22,7 +24,7 @@ const ProjectsProvider = ({children}) => {
           }
         }
         const { data } = await clienteAxios('/proyectos', config)
-        setProyectos(...proyectos, data)
+        setProyectos(data)
       } catch (error) {
         console.log(error)
       }
@@ -43,6 +45,7 @@ const ProjectsProvider = ({children}) => {
   const submitProyecto = async proyecto => {
     try {
       const token = localStorage.getItem('token')
+      if (!token) return
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +53,7 @@ const ProjectsProvider = ({children}) => {
         }
       }
       const { data } = await clienteAxios.post(`/proyectos`, proyecto, config)
-
+      setProyectos([...proyectos, data])
       setAlerta({
         msg: 'Proyecto creado correctamente',
         error: false
@@ -70,6 +73,7 @@ const ProjectsProvider = ({children}) => {
   const obtenerProyecto = async id => {
     try {
       const token = localStorage.getItem('token')
+      if (!token) return
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -78,6 +82,8 @@ const ProjectsProvider = ({children}) => {
       }
       const { data } = await clienteAxios.post(`/proyectos/${id}`, config)
       console.log(data)
+      
+      //setProyecto(data)
     } catch (error) {
       console.log(error)
     }
@@ -90,7 +96,8 @@ const ProjectsProvider = ({children}) => {
         alerta,
         mostrarAlerta,
         submitProyecto,
-        obtenerProyecto
+        obtenerProyecto,
+        proyecto
       }}
     >
       {children}
